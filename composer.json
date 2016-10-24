@@ -1,0 +1,20 @@
+{
+    "name": "necryin/jax",
+    "description": "Jax - Just Another Comments",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {"Necryin\\Jax\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Necryin\\Tests\\Jax\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    }
+}

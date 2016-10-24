@@ -1,0 +1,19 @@
+<?php
+
+return [
+    \Necryin\Jax\Component::DB => [
+        'class' => \Necryin\Jax\DbConnection::class,
+        'dsn' => 'mysql:host=yourDbHost;dbname=yourDbName;port=3306;charset=utf8;',
+        'user' => 'yourDbUser',
+        'password' => 'yourDbPassword',
+        'options' => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        ]
+    ],
+    \Necryin\Jax\Component::ROUTER => [
+        'class' => \Necryin\Jax\SimpleUrlMather::class,
+        'fallback' => 'main/index',
+    ],
+];

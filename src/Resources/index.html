@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jax - comments tree for you</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-app='App'>
+<h1 class="header">Jax - Just Another Comments</h1>
+<div ng-controller="CommentsController">
+    <div class="root-comment-editor">
+        <textarea ng-model="newRootText"></textarea><br/>
+        <button class="btn btn-primary btn-xs" ng-click="insert(newRootText, null); newRootText='';">Новый комментарий</button>
+    </div>
+    <ul class="comment-body">
+        <li class="comment-footer" ng-repeat="comment in comments track by $index" ng-include="'comments_tree.html'"></li>
+    </ul>
+</div>
+
+
+<script type="text/ng-template" id="comments_tree.html">
+    <div class="panel panel-primary">
+        <div class="panel-body" ng-init="edit=false;">
+            <div class="comment-time" ng-bind="comment.date_created"></div>
+            <span ng-show="comment.deleted == '0' && !edit" ng-bind="comment.text"></span>
+            <div class="comment-editor" ng-show="edit==true">
+                <textarea ng-model="commentText"></textarea>
+                <button class="btn btn-primary btn-xs" ng-click="update(commentText, comment); edit=false;">Отослать</button>
+            </div>
+
+            <span ng-show="comment.deleted != '0'" ng-bind="NO_COMMENT"></span>
+        </div>
+        <div class="panel-footer" ng-init="clicked=false; send=false;">
+            <button class="btn btn-danger btn-xs" ng-show="comment.deleted == '0'" ng-click="delete(comment)">Удалить</button>
+            <button class="btn btn-warning btn-xs" ng-show="comment.deleted == '0'" ng-click="edit = !edit">Редактировать</button>
+            <button class="btn btn-success btn-xs" ng-show="comment.deleted == '0'" ng-click="send = !send">Ответить</button>
+            <button class="btn btn-info btn-xs" ng-show="!clicked && comment.root_id == null && (comment.right_key/2 - 1) > 0" ng-click="getTree(comment); clicked=true;">Раскрыть ветвь ({{ comment.right_key/2 - 1 }})</button>
+            <div class="comment-editor" ng-show="send==true">
+                <textarea ng-model="newText"></textarea>
+                <button class="btn btn-primary btn-xs" ng-click="insert(newText, comment); send=false;">Отослать</button>
+            </div>
+        </div>
+    </div>
+
+    <ul class="comment-body">
+        <li class="comment-footer" ng-repeat="comment in comment.nodes" ng-include="'comments_tree.html'"></li>
+    </ul>
+</script>
+
+<script src="js/angular.min.js"></script>
+<script src="js/lodash.js"></script>
+<script src="js/app.js"></script>
+<script src="js/UrlService.js"></script>
+<script src="js/CommentsService.js"></script>
+<script src="js/CommentsController.js"></script>
+</body>
+</html>
